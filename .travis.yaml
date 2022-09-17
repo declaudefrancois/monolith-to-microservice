@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+  - 13
+
+services:
+  - docker
+
+install:
+  - echo "nothing to install"
+
+before_script:
+  - echo "no tests"
+
+script:
+  - docker build -t udagram-api-feed ./udagram-api-feed
+  - docker tag udagram-api-feed $DOCKER_USERNAME/udagram-api-feed:v$TRAVIS_BUILD_NUMBER
+  - docker build -t udagram-api-user ./udagram-api-user
+  - docker tag udagram-api-user $DOCKER_USERNAME/udagram-api-user:v$TRAVIS_BUILD_NUMBER
+  - docker build -t udagram-frontend ./udagram-frontend
+  - docker tag udagram-frontend $DOCKER_USERNAME/udagram-frontend:v$TRAVIS_BUILD_NUMBER
+  - docker build -t reverseproxy ./reverseproxy
+  - docker tag reverseproxy $DOCKER_USERNAME/reverseproxy:v$TRAVIS_BUILD_NUMBER
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push $DOCKER_USERNAME/udagram-api-feed
+  - docker push $DOCKER_USERNAME/udagram-api-user
+  - docker push $DOCKER_USERNAME/udagram-frontend
+  - docker push $DOCKER_USERNAME/reverseproxy

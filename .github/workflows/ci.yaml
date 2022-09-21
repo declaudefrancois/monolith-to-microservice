@@ -28,6 +28,7 @@ jobs:
         with:
           context: .
           file: "udagram-api-feed/Dockerfile"
+          no-cache: true
           push: true
           tags: ${{secrets.DOCKER_USERNAME}}/udagram-api-feed:latest, ${{secrets.DOCKER_USERNAME}}/udagram-api-feed:${{ github.run_number }}
 
@@ -37,6 +38,7 @@ jobs:
           context: .
           file: "udagram-api-user/Dockerfile"
           push: true
+          no-cache: true
           tags: ${{secrets.DOCKER_USERNAME}}/udagram-api-user:latest, ${{secrets.DOCKER_USERNAME}}/udagram-api-user:${{ github.run_number }}
 
 
@@ -46,6 +48,7 @@ jobs:
           context: .
           file: "udagram-frontend/Dockerfile"
           push: true
+          no-cache: true
           tags: ${{secrets.DOCKER_USERNAME}}/udagram-frontend:latest, ${{secrets.DOCKER_USERNAME}}/udagram-frontend:${{ github.run_number }}
 
 

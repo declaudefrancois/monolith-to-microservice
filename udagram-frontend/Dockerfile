@@ -4,7 +4,8 @@ FROM beevelop/ionic:latest AS ionic
 WORKDIR /usr/src/app
 # Installer les dépendances de l'application
 # Un joker est utilisé pour s'assurer que package.json ET package-lock.json sont copiés.
-COPY package*.json ./
+COPY package.json ./
+COPY package-lock.json ./
 RUN npm i
 # Regroupement des sources de l'application
 COPY . .

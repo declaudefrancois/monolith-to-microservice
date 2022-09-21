@@ -24,13 +24,15 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: build and push feed service
+        uses: docker/build-push-action@v3
         with:
           context: .
           file: "udagram-api-feed/Dockerfile"
           push: true
           tags: ${{secrets.DOCKER_USERNAME}}/udagram-api-feed:latest, ${{secrets.DOCKER_USERNAME}}/udagram-api-feed:${{ github.run_number }}
 
-      - name: build and push user service
+      - name: build and push user 
+        uses: docker/build-push-action@v3
         with:
           context: .
           file: "udagram-api-user/Dockerfile"
@@ -38,7 +40,8 @@ jobs:
           tags: ${{secrets.DOCKER_USERNAME}}/udagram-api-user:latest, ${{secrets.DOCKER_USERNAME}}/udagram-api-user:${{ github.run_number }}
 
 
-      - name: build and push frontend service
+      - name: build and push frontend 
+        uses: docker/build-push-action@v3
         with:
           context: .
           file: "udagram-frontend/Dockerfile"
@@ -47,6 +50,7 @@ jobs:
 
 
       - name: build and push nginx reverse proxy
+        uses: docker/build-push-action@v3
         with:
           context: .
           file: "udagram-reverseproxy/Dockerfile"

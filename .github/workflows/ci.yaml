@@ -1,0 +1,54 @@
+name: CI with docker
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  build-n-push-to-dockerhub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: pull code
+        uses: actions/checkout@v3
+
+      - name: setup nodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "13"
+
+      - name: login to docker
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: build and push feed service
+        with:
+          context: .
+          file: "udagram-api-feed/Dockerfile"
+          push: true
+          tags: ${{secrets.DOCKER_USERNAME}}/udagram-api-feed:latest, ${{secrets.DOCKER_USERNAME}}/udagram-api-feed:${{ github.run_number }}
+
+      - name: build and push user service
+        with:
+          context: .
+          file: "udagram-api-user/Dockerfile"
+          push: true
+          tags: ${{secrets.DOCKER_USERNAME}}/udagram-api-user:latest, ${{secrets.DOCKER_USERNAME}}/udagram-api-user:${{ github.run_number }}
+
+
+      - name: build and push frontend service
+        with:
+          context: .
+          file: "udagram-frontend/Dockerfile"
+          push: true
+          tags: ${{secrets.DOCKER_USERNAME}}/udagram-frontend:latest, ${{secrets.DOCKER_USERNAME}}/udagram-frontend:${{ github.run_number }}
+
+
+      - name: build and push nginx reverse proxy
+        with:
+          context: .
+          file: "udagram-reverseproxy/Dockerfile"
+          push: true
+          tags: ${{secrets.DOCKER_USERNAME}}/udagram-reverseproxy:latest, ${{secrets.DOCKER_USERNAME}}/udagram-reverseproxy:${{ github.run_number }}
